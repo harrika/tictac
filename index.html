@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- head stuff
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>tIC tAC tOE the Game !</title>
+  <meta name="description" content="A tic tac toe project">
+  <meta name="author" content="Henry Mukomba Kirya">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- styling begins
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Permanent+Marker|Raleway&display=swap');
+    body {
+      background: #EEEEEE;
+    }
+    .square {
+      height: 65px;
+      width: 65px;
+      font-size: 50px;
+      text-align: center;
+      font-family: 'Permanent Marker', cursive;
+    }
+    .message {
+      font-family: 'Raleway', sans-serif;
+      font-size: 20px;
+    }
+
+    th.square#s1,
+    th.square#s2,
+    th.square#s3,
+    th.square#s4,
+    th.square#s5,
+    th.square#s6 {
+      border-bottom: 4px solid #2a4849;
+    }
+    th.square#s2,
+    th.square#s5,
+    th.square#s8,
+    th.square#s3,
+    th.square#s6,
+    th.square#s9 {
+      border-left: 4px solid #2a4849;
+    }
+
+
+
+
+  </style> <!-- styling ends
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <div class="one-half column" style="margin-top: 10%">
+        <h4>Tic Tac Toe</h4>
+        <p>
+          Tic-tac-toe (American English), noughts and crosses (British English), or Xs and Os is a paper-and-pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.
+          <br>
+          Because of the simplicity of tic-tac-toe, it is often used as a pedagogical tool for teaching the concepts of good sportsmanship and the branch of artificial intelligence that deals with the searching of game trees
+          <br><br>
+          <img src="images/tictactoe.png">
+        </p>
+
+      </div>
+      <div class="one-half column" style="margin-top: 10%">
+        <h5 id="message"><strong></strong></h5>
+        <table class="u-full-width" border="0">
+          <thead>
+            <tr>
+              <th class="square" id = 's1' id="one" onclick="makeMove(this)"></th>
+              <th class="square" id = 's2' onclick="makeMove(this)"></th>
+              <th class="square" id = 's3' onclick="makeMove(this)"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="square" id = 's4' onclick="makeMove(this)"></td>
+              <th class="square" id = 's5' onclick="makeMove(this)"></td>
+              <th class="square" id = 's6' onclick="makeMove(this)"></td>
+            </tr>
+            <tr>
+              <th class="square" id = 's7' onclick="makeMove(this)"></td>
+              <th class="square" id = 's8' onclick="makeMove(this)"></td>
+              <th class="square" id = 's9' onclick="makeMove(this)"></td>
+            </tr>
+          </tbody>
+        </table>
+        <input class="button-primary" onclick="restart()" type="button" value="RESTART">
+       </div>
+      
+    </div>
+  </div>
+
+<!-- End Document | Start javascript code ––––––––––––––––––––––––– -->
+<script type="text/javascript">
+
+var fin = 0;
+var player = 'X';
+counter = [];
+placeMessage(player+"'s turn to play");
+
+function placeMessage(msg) {
+  document.getElementById('message').innerHTML = msg;
+}
+
+function makeMove(sqr) {
+  if (fin == 1) {
+    placeMessage('Game ended. Restart to play');
+  } else if (sqr.innerText == '') {
+    placeMessage("");
+    sqr.innerHTML = player;
+    counter.push(player);
+    switchPlayer();
+  } else {
+    placeMessage('Select an empty square');
+  }  
+}
+
+function switchPlayer() {
+  if (checkWinner(player)) {
+    placeMessage("Felicitations..."+player+" Won!");
+    fin = 1; 
+  } else if (checkAdraw()) {
+    placeMessage("DRAW: nobody wins, nobody loses");
+    fin = 1;
+  } else if (player == 'O') {
+    player = 'X'
+   placeMessage(player+"'s turn to play");
+  } else {
+    player = 'O'
+   placeMessage(player+"'s turn to play");
+  }
+}
+
+function getcell(s) {
+  var ss = "s"+s;
+  return document.getElementById(ss).innerHTML;
+}
+
+function checkrow(x,y,z,play) {
+  var res = 0;
+  if (getcell(x) == play
+  && getcell(y) == play
+  && getcell(z) == play) {
+    res = 1;
+  }
+  return res;
+}
+
+function checkWinner(play) {
+  var res = 0;
+  if (checkrow(1,2,3,play) ||
+      checkrow(4,5,6,play) ||
+      checkrow(7,8,9,play) ||
+      checkrow(4,5,6,play) ||
+      checkrow(1,4,7,play) ||
+      checkrow(2,5,8,play) ||
+      checkrow(3,6,9,play) ||
+      checkrow(1,5,9,play) ||
+      checkrow(3,5,7,play)) {
+        res = 1;
+     }
+     return res;
+} 
+
+function clearCell(s) {  
+  var ss = "s"+s;
+  document.getElementById(ss).innerHTML = "";
+}
+
+function checkAdraw() {
+  var cntx = 0;
+  var cnto = 0;
+  counter.forEach(function (k) {
+    if (k == 'X') {
+      cntx++;      
+    } else {
+      cnto++;
+    }
+  });
+  return (cntx>4 || cnto>4);
+}
+
+function restart() {
+  fin = 0;
+  counter = [];
+  const cells = [1,2,3,4,5,6,7,8,9]
+  cells.forEach(function (cc) {
+    clearCell(cc);
+  });
+   placeMessage("X gets to play");
+ }
+
+</script>
+</body>
+</html>
+
+
+<!-- to do -->
+<!-- place mask over wiki image -->
+
